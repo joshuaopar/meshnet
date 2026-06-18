@@ -1,26 +1,21 @@
 {
   "expo": {
-    "name": "meshnet",
+    "name": "MeshNet",
     "slug": "snack-c99e5c8f-380e-4ca9-b3e4-2a08d205b809",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
-    },
-    "ios": {
-      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-<<<<<<< HEAD
       "edgeToEdgeEnabled": true,
       "package": "com.oparjoshua.meshnet"
     },
@@ -34,12 +29,3 @@
     }
   }
 }
-=======
-      "edgeToEdgeEnabled": true
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
-  }
-}
->>>>>>> 6ed6e0e3fcbe7baee51bf1ebaef92c1e516f76f9
