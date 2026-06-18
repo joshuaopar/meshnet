@@ -1,19 +1,16 @@
 {
-  "license": "0BSD",
+  "name": "meshnet",
+  "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "android": "expo start --android"
   },
   "dependencies": {
-    "expo": "~54.0.35",
-    "expo-status-bar": "~3.0.9",
-    "react": "19.1.0",
-    "react-native": "0.81.5",
-    "@expo/vector-icons": "^15.0.3",
-    "react-native-paper": "4.9.2"
+    "expo": "~48.0.0",
+    "expo-status-bar": "~1.4.4",
+    "react": "18.2.0",
+    "react-native": "0.71.8"
   },
   "private": true
 }
