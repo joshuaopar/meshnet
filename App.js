@@ -1,82 +1,78 @@
+cat > App.js << 'DONE'
 import React, { useState } from 'react';
-import {
-  View, Text, TextInput, TouchableOpacity,
-  FlatList, StyleSheet
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import ChatScreen from './ChatScreen';
+import PeersScreen from './PeersScreen';
+import OnboardingScreen from './OnboardingScreen';
 
-export default function ChatScreen({ user }) {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
+export default function App() {
+  const [user, setUser] = useState(null);
+  const [tab, setTab] = useState('chat');
 
-  const send = () => {
-    if (!input.trim()) return;
-    setMessages(prev => [...prev, {
-      id: Date.now().toString(),
-      text: input.trim(),
-      time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-    }]);
-    setInput('');
-  };
+  if (!user) {
+    return <OnboardingScreen onDone={(u) => setUser(u)} />;
+  }
 
   return (
-    <View style={s.container}>
-      <View style={s.header}>
-        <Text style={s.headerText}>⬡ MeshNet</Text>
-        <Text style={s.headerSub}>no internet · peer to peer</Text>
-      </View>
-      <FlatList
-        data={messages}
-        keyExtractor={i => i.id}
-        contentContainerStyle={s.list}
-        ListEmptyComponent={
-          <View style={s.empty}>
-            <Text style={s.emptyIcon}>⬡</Text>
-            <Text style={s.emptyTitle}>No messages yet</Text>
-            <Text style={s.emptyText}>Works without internet</Text>
-          </View>
-        }
-        renderItem={({item}) => (
-          <View style={s.bubble}>
-            <Text style={s.bubbleText}>{item.text}</Text>
-            <Text style={s.bubbleTime}>{item.time}</Text>
+    <SafeAreaView style={s.container}>
+      <View style={s.content}>
+        {tab === 'chat' ? (
+          <ChatScreen user={user} />
+        ) : tab === 'peers' ? (
+          <PeersScreen user={user} />
+        ) : (
+          <View style={s.profile}>
+            <View style={s.profileCard}>
+              <Text style={s.profileAvatar}>{user.name[0].toUpperCase()}</Text>
+              <Text style={s.profileName}>{user.name}</Text>
+              <Text style={s.profileLabel}>Node ID</Text>
+              <Text style={s.profileId}>{user.nodeId}</Text>
+              <View style={s.profileBadge}>
+                <Text style={s.profileBadgeText}>⬡ mesh active</Text>
+              </View>
+            </View>
+            <TouchableOpacity style={s.logoutBtn} onPress={() => setUser(null)}>
+              <Text style={s.logoutText}>Reset identity</Text>
+            </TouchableOpacity>
           </View>
         )}
-      />
-      <View style={s.inputRow}>
-        <TextInput
-          style={s.input}
-          value={input}
-          onChangeText={setInput}
-          placeholder="Type a message..."
-          placeholderTextColor="#999"
-        />
-        <TouchableOpacity style={s.sendBtn} onPress={send}>
-          <Text style={s.sendText}>↑</Text>
+      </View>
+      <View style={s.tabBar}>
+        <TouchableOpacity style={[s.tab, tab === 'chat' && s.tabActive]} onPress={() => setTab('chat')}>
+          <Text style={[s.tabIcon, tab === 'chat' && s.tabIconActive]}>💬</Text>
+          <Text style={[s.tabLabel, tab === 'chat' && s.tabLabelActive]}>Chat</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[s.tab, tab === 'peers' && s.tabActive]} onPress={() => setTab('peers')}>
+          <Text style={[s.tabIcon, tab === 'peers' && s.tabIconActive]}>⬡</Text>
+          <Text style={[s.tabLabel, tab === 'peers' && s.tabLabelActive]}>Peers</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[s.tab, tab === 'settings' && s.tabActive]} onPress={() => setTab('settings')}>
+          <Text style={[s.tabIcon, tab === 'settings' && s.tabIconActive]}>⚙️</Text>
+          <Text style={[s.tabLabel, tab === 'settings' && s.tabLabelActive]}>Profile</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
-  header: { padding: 20, borderBottomWidth: 0.5, borderBottomColor: '#e0e0e0', alignItems: 'center' },
-  headerText: { fontSize: 22, fontWeight: '500', color: '#111' },
-  headerSub: { fontSize: 12, color: '#22c55e', marginTop: 3 },
-  list: { padding: 16, flexGrow: 1 },
-  empty: { alignItems: 'center', paddingTop: 100 },
-  emptyIcon: { fontSize: 52, marginBottom: 16 },
-  emptyTitle: { fontSize: 17, fontWeight: '500', color: '#111' },
-  emptyText: { fontSize: 14, color: '#888', marginTop: 6 },
-  bubble: {
-    alignSelf: 'flex-end', backgroundColor: '#111',
-    borderRadius: 16, borderBottomRightRadius: 4,
-    paddingHorizontal: 14, paddingVertical: 8, marginBottom: 8, maxWidth: '75%'
-  },
-  bubbleText: { color: '#fff', fontSize: 15 },
-  bubbleTime: { color: '#999', fontSize: 11, marginTop: 3, textAlign: 'right' },
-  inputRow: { flexDirection: 'row', padding: 12, borderTopWidth: 0.5, borderTopColor: '#e0e0e0', alignItems: 'center' },
-  input: { flex: 1, backgroundColor: '#f3f4f6', borderRadius: 20, paddingHorizontal: 16, paddingVertical: 10, fontSize: 15, color: '#111', marginRight: 8 },
-  sendBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#111', justifyContent: 'center', alignItems: 'center' },
-  sendText: { color: '#fff', fontSize: 18 }
+  content: { flex: 1 },
+  tabBar: { flexDirection: 'row', borderTopWidth: 0.5, borderTopColor: '#e0e0e0', backgroundColor: '#fff' },
+  tab: { flex: 1, alignItems: 'center', paddingVertical: 10 },
+  tabActive: { borderTopWidth: 2, borderTopColor: '#111' },
+  tabIcon: { fontSize: 22, color: '#ccc' },
+  tabIconActive: { color: '#111' },
+  tabLabel: { fontSize: 11, color: '#ccc', marginTop: 3 },
+  tabLabelActive: { color: '#111', fontWeight: '500' },
+  profile: { flex: 1, padding: 24, justifyContent: 'center' },
+  profileCard: { alignItems: 'center', backgroundColor: '#f9fafb', borderRadius: 20, padding: 32, borderWidth: 0.5, borderColor: '#e5e7eb', marginBottom: 16 },
+  profileAvatar: { fontSize: 56, marginBottom: 12 },
+  profileName: { fontSize: 24, fontWeight: '500', color: '#111', marginBottom: 16 },
+  profileLabel: { fontSize: 11, color: '#9ca3af', marginBottom: 4 },
+  profileId: { fontSize: 14, fontFamily: 'monospace', color: '#374151', marginBottom: 16, letterSpacing: 1 },
+  profileBadge: { backgroundColor: '#f0fdf4', paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20, borderWidth: 0.5, borderColor: '#bbf7d0' },
+  profileBadgeText: { fontSize: 13, color: '#16a34a' },
+  logoutBtn: { padding: 16, borderRadius: 14, alignItems: 'center', borderWidth: 0.5, borderColor: '#e5e7eb' },
+  logoutText: { fontSize: 15, color: '#ef4444' },
 });
