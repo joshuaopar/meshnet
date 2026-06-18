@@ -20,6 +20,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+<<<<<<< HEAD
       "edgeToEdgeEnabled": true,
       "package": "com.oparjoshua.meshnet"
     },
@@ -33,3 +34,12 @@
     }
   }
 }
+=======
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
+>>>>>>> 6ed6e0e3fcbe7baee51bf1ebaef92c1e516f76f9
